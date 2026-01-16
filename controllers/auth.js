@@ -58,7 +58,14 @@ router.post("/sign-up", async (req, res) => {
 
   const newUser = await User.create(req.body);
 
-  res.send(newUser);
+  req.session.user = {
+    username: newUser.username,
+    _id: newUser._id,
+  };
+
+  req.session.save(() => {
+    res.redirect("/");
+  });
 });
 
 module.exports = router;
